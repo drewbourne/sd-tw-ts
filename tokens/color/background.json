@@ -1,0 +1,24 @@
+{
+  "color": {
+    "background": {
+      "primary": {
+        "value": "hsl(0, 0%, 100%)"
+      },
+      "secondary": {
+        "value": "hsl(0, 0%, 95%)"
+      },
+      "tertiary": {
+        "value": "hsl(0, 0%, 80%)"
+      },
+      "whoops": {
+        "value": "hsl(0, 0%, 80%)",
+        "attributes": {
+          "deprecated": {
+            "since": "1.0.0",
+            "reason": "Misspelled name"
+          }
+        }
+      }
+    }
+  }
+}

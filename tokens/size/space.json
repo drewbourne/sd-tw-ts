@@ -1,0 +1,21 @@
+{
+  "size": {
+    "space": {
+      "x0_25": {
+        "value": "0.25rem"
+      },
+      "x0_5": {
+        "value": "0.5rem"
+      },
+      "x1": {
+        "value": "1rem"
+      },
+      "x2": {
+        "value": "2rem"
+      },
+      "x4": {
+        "value": "4rem"
+      }
+    }
+  }
+}

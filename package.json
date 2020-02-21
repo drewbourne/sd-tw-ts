@@ -1,0 +1,26 @@
+{
+  "name": "sd-tw-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-sd": "node build.js",
+    "build-tw": "npx tailwindcss build css/styles.css --config css/tailwind.config.js --output css/out.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ramda": "^0.27.0",
+    "style-dictionary": "^2.8.3",
+    "tailwindcss": "^1.2.0",
+    "typescript": "^3.7.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/parser": "^7.8.4",
+    "globby": "^11.0.0",
+    "rollup": "^1.31.1",
+    "rollup-plugin-babel": "^4.3.3"
+  }
+}
