@@ -1,6 +1,7 @@
 const globby = require("globby");
 const fs = require("fs").promises;
 const { parse, transformAsync, types } = require("@babel/core");
+const pMap = require("p-map");
 const rollup = require("rollup");
 const rollupBabel = require("rollup-plugin-babel");
 const pkg = require("./package.json");
@@ -9,7 +10,14 @@ async function build() {
   const paths = await globby(["tokens/**/*.json"]);
   console.log("paths", paths);
 
-  const file = paths[0];
+  const sources = await pMap(paths, (file) => ({
+    file,
+    ...transform(file),
+  }));
+  console.log("sources", sources);
+}
+
+async function transform(file) {
   const json = await fs.readFile(file, "utf8");
   console.log("json", json);
 
@@ -25,6 +33,8 @@ async function build() {
     plugins: [babelPluginSource({ pkg, file })],
   });
   console.log("transformed", transformed.code);
+
+  return transformed;
 }
 
 build();
@@ -93,88 +103,8 @@ function babelPluginSource({ file }) {
                 ]),
               ),
             );
-
-            // path.replaceWithMultiple([
-            //   types.objectProperty(
-            //     types.stringLiteral("value"),
-            //     types.stringLiteral(path.node.value.value),
-            //   ),
-            //   types.objectProperty(
-            //     types.stringLiteral("__package"),
-            //     types.objectExpression([
-            //       types.objectProperty(
-            //         types.stringLiteral("name"),
-            //         types.stringLiteral(pkg.name),
-            //       ),
-            //       types.objectProperty(
-            //         types.stringLiteral("version"),
-            //         types.stringLiteral(pkg.version),
-            //       ),
-            //     ]),
-            //   ),
-            //   types.stringLiteral("__source"),
-            //   types.stringLiteral(
-            //     `${pkg.name}/${file}:${path.node.value.loc.start.line}:${path.node.value.loc.start.column}-${path.node.value.loc.end.line}:${path.node.value.loc.end.column}`,
-            //   ),
-            // ]);
-            // path.insertAfter(
-            //   types.objectProperty(
-
-            // types.objectExpression([
-            //   types.objectProperty(
-            //     types.stringLiteral("file"),
-            //     types.stringLiteral(file),
-            //   ),
-            //   types.objectProperty(
-            //     types.stringLiteral("loc"),
-            //     // types.stringLiteral(JSON.stringify(path.node.value.loc)),
-            //     types.objectExpression([
-            //       types.objectProperty(
-            //         types.stringLiteral("start"),
-            //         types.objectExpression([
-            //           types.objectProperty(
-            //             types.stringLiteral("line"),
-            //             types.numericLiteral(
-            //               path.node.value.loc.start.line,
-            //             ),
-            //           ),
-            //           types.objectProperty(
-            //             types.stringLiteral("column"),
-            //             types.numericLiteral(
-            //               path.node.value.loc.start.column,
-            //             ),
-            //           ),
-            //         ]),
-            //       ),
-            //       types.objectProperty(
-            //         types.stringLiteral("end"),
-            //         types.objectExpression([
-            //           types.objectProperty(
-            //             types.stringLiteral("line"),
-            //             types.numericLiteral(path.node.value.loc.end.line),
-            //           ),
-            //           types.objectProperty(
-            //             types.stringLiteral("column"),
-            //             types.numericLiteral(
-            //               path.node.value.loc.end.column,
-            //             ),
-            //           ),
-            //         ]),
-            //       ),
-            //     ]),
-            //   ),
-            // ]),
-            // ),
-            // );
           }
         }
-
-        // if (types.isIdentifier(path.node.key)) {
-        //   if (path.node.key.name === "value") {
-        //     // ADD
-        //     console.log(path.node);
-        //   }
-        // }
       },
     },
   };
